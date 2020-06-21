@@ -92,6 +92,10 @@ export function parseForESLint(
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
     if (!isVueFile(code, options)) {
+        if (typeof options.callback === "function") {
+            // bug fix: https://github.com/typescript-eslint/typescript-eslint/issues/967
+            options = options.callback(undefined, options) || options // eslint-disable-line no-param-reassign
+        }
         result = parseScript(code, options)
         document = null
     } else {
